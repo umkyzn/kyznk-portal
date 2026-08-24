@@ -7,6 +7,19 @@ const links = [
   { label: 'bruhsailer', href: 'https://umkyzn.github.io/BRUHsailer/' },
 ];
 
+/**
+ * Icon row. Each entry becomes one column, and the row stays centred however
+ * many there are. `path` is the `d` of a single path on a 24x24 grid, drawn as
+ * a stroke so it inherits the link colour.
+ */
+const icons = [
+  {
+    label: 'email',
+    href: 'mailto:contact@kyznk.dev',
+    path: 'M2.5 6h19v12h-19z M2.5 6 12 12.6 21.5 6',
+  },
+];
+
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const title = 'kyznk.dev';
 const description = 'kyznk.dev';
@@ -47,7 +60,32 @@ const description = 'kyznk.dev';
             <li>
               <a href={link.href} rel="noopener noreferrer">
                 <span class="link-label">{link.label}</span>
-                <span class="link-arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <ul class="icons">
+        {
+          icons.map((icon) => (
+            <li>
+              <a
+                href={icon.href}
+                aria-label={icon.label}
+                rel={icon.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.6"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  aria-hidden="true"
+                >
+                  <path d={icon.path} />
+                </svg>
               </a>
             </li>
           ))
