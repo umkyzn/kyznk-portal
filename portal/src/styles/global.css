@@ -1,0 +1,274 @@
+:root {
+  --bg: #000000;
+  --fg: #ffffff;
+  --fg-dim: rgba(255, 255, 255, 0.82);
+
+  --mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--mono);
+  line-height: 1.5;
+}
+
+/* ------------------------------------------------------------------ *
+ * Background graphic
+ * ------------------------------------------------------------------ */
+
+.mesh,
+.vignette,
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+}
+
+.mesh {
+  z-index: 0;
+  overflow: hidden;
+}
+
+.blob {
+  position: absolute;
+  display: block;
+  width: 90vmax;
+  height: 90vmax;
+  border-radius: 50%;
+  /* Soft radial falloff renders smoothly on its own — no blur filter, which
+     keeps this cheap enough to composite on the GPU. */
+  will-change: transform;
+}
+
+.blob-1 {
+  top: -32vmax;
+  left: -22vmax;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.13),
+    rgba(255, 255, 255, 0) 62%
+  );
+  animation: drift-1 48s ease-in-out infinite;
+}
+
+.blob-2 {
+  top: -10vmax;
+  right: -34vmax;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.085),
+    rgba(255, 255, 255, 0) 60%
+  );
+  animation: drift-2 61s ease-in-out infinite;
+}
+
+.blob-3 {
+  bottom: -38vmax;
+  left: 6vmax;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.105),
+    rgba(255, 255, 255, 0) 58%
+  );
+  animation: drift-3 55s ease-in-out infinite;
+}
+
+.blob-4 {
+  bottom: -30vmax;
+  right: -18vmax;
+  background: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0) 64%
+  );
+  animation: drift-4 72s ease-in-out infinite;
+}
+
+@keyframes drift-1 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(12vmax, 8vmax, 0) scale(1.18);
+  }
+}
+
+@keyframes drift-2 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.1);
+  }
+  50% {
+    transform: translate3d(-14vmax, 12vmax, 0) scale(0.92);
+  }
+}
+
+@keyframes drift-3 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(0.95);
+  }
+  50% {
+    transform: translate3d(10vmax, -12vmax, 0) scale(1.22);
+  }
+}
+
+@keyframes drift-4 {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.05);
+  }
+  50% {
+    transform: translate3d(-11vmax, -9vmax, 0) scale(0.9);
+  }
+}
+
+/* Pulls the edges back to black so the centre column always has contrast. */
+.vignette {
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    rgba(0, 0, 0, 0.96) 100%
+  );
+}
+
+/* Fine grain. Kills the banding that large soft gradients produce on 8-bit
+   displays. Inlined as a data URI — no external request. */
+.grain {
+  z-index: 2;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ------------------------------------------------------------------ *
+ * Centre column
+ * ------------------------------------------------------------------ */
+
+.center {
+  position: relative;
+  z-index: 3;
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  /* Keeps the tap target at the 44px accessibility minimum on touch. */
+  min-height: 44px;
+  padding: 0.35em 0.75em;
+  color: var(--fg-dim);
+  font-family: var(--mono);
+  font-size: clamp(1rem, 3.5vw, 1.125rem);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  transition: color 220ms ease;
+}
+
+.link-label {
+  position: relative;
+}
+
+/* Underline drawn as a pseudo-element so it can animate in from the left. */
+.link-label::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -0.25em;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 260ms ease;
+}
+
+.link-arrow {
+  display: inline-block;
+  transition: transform 260ms ease;
+}
+
+.links a:hover,
+.links a:focus-visible {
+  color: var(--fg);
+}
+
+.links a:hover .link-label::after,
+.links a:focus-visible .link-label::after {
+  transform: scaleX(1);
+}
+
+.links a:hover .link-arrow,
+.links a:focus-visible .link-arrow {
+  transform: translateX(0.25em);
+}
+
+.links a:focus-visible {
+  outline: 1px solid var(--fg);
+  outline-offset: 0.5em;
+  border-radius: 2px;
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion / contrast preferences
+ * ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .blob {
+    animation: none;
+  }
+
+  .links a,
+  .link-label::after,
+  .link-arrow {
+    transition: none;
+  }
+}
+
+/* Drop the decoration entirely when the user asks for maximum contrast. */
+@media (prefers-contrast: more) {
+  .mesh,
+  .grain,
+  .vignette {
+    display: none;
+  }
+
+  .links a {
+    color: var(--fg);
+  }
+}
