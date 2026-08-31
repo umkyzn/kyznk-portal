@@ -28,10 +28,6 @@ body {
   line-height: 1.5;
 }
 
-/* ------------------------------------------------------------------ *
- * Background graphic
- * ------------------------------------------------------------------ */
-
 .mesh,
 .vignette,
 .grain {
@@ -51,8 +47,6 @@ body {
   width: 90vmax;
   height: 90vmax;
   border-radius: 50%;
-  /* Soft radial falloff renders smoothly on its own — no blur filter, which
-     keeps this cheap enough to composite on the GPU. */
   will-change: transform;
 }
 
@@ -140,7 +134,6 @@ body {
   }
 }
 
-/* Pulls the edges back to black so the centre column always has contrast. */
 .vignette {
   z-index: 1;
   background: radial-gradient(
@@ -151,17 +144,11 @@ body {
   );
 }
 
-/* Fine grain. Kills the banding that large soft gradients produce on 8-bit
-   displays. Inlined as a data URI — no external request. */
 .grain {
   z-index: 2;
   opacity: 0.028;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-
-/* ------------------------------------------------------------------ *
- * Centre column
- * ------------------------------------------------------------------ */
 
 .center {
   position: relative;
@@ -173,8 +160,6 @@ body {
   align-items: center;
   justify-content: center;
   gap: clamp(1rem, 2.5vh, 1.5rem);
-  /* Asymmetric padding lifts the block off the geometric centre — dead centre
-     optically reads as slightly low. */
   padding: 2rem 1.5rem 5rem;
   text-align: center;
 }
@@ -192,7 +177,6 @@ body {
 .links a {
   display: inline-flex;
   align-items: center;
-  /* Keeps the tap target at the 44px accessibility minimum on touch. */
   min-height: 44px;
   padding: 0.35em 0.75em;
   color: var(--fg-dim);
@@ -207,7 +191,6 @@ body {
   position: relative;
 }
 
-/* Underline drawn as a pseudo-element so it can animate in from the left. */
 .link-label::after {
   content: '';
   position: absolute;
@@ -237,8 +220,6 @@ body {
   border-radius: 2px;
 }
 
-/* ---- entrance ---- */
-
 @keyframes rise {
   from {
     opacity: 0;
@@ -262,21 +243,16 @@ body {
 .links li:nth-child(5) { animation-delay: 410ms; }
 .links li:nth-child(6) { animation-delay: 490ms; }
 
-/* Always the last beat, whatever the link count. */
 .icons {
   animation-delay: 560ms;
 }
 
-/* ---- icon row ---- */
-
-/* One column per icon; the row stays centred at any count. */
 .icons {
   margin: 0;
   padding: 0;
   list-style: none;
   display: flex;
   justify-content: center;
-  /* Wraps only if enough icons are added to overflow a narrow screen. */
   flex-wrap: wrap;
   gap: 0.25rem;
 }
@@ -285,7 +261,6 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  /* Square 44px keeps the tap target legal even though the glyph is 20px. */
   width: 44px;
   height: 44px;
   border: 1px solid var(--ring);
@@ -312,10 +287,6 @@ body {
   outline-offset: 3px;
 }
 
-/* ------------------------------------------------------------------ *
- * Motion / contrast preferences
- * ------------------------------------------------------------------ */
-
 @media (prefers-reduced-motion: reduce) {
   .blob {
     animation: none;
@@ -333,7 +304,6 @@ body {
   }
 }
 
-/* Drop the decoration entirely when the user asks for maximum contrast. */
 @media (prefers-contrast: more) {
   .mesh,
   .grain,

@@ -1,17 +1,11 @@
 ---
 import '../styles/global.css';
 
-/** The entire content of the site. Add a link by adding a line. */
 const links = [
   { label: 'github', href: 'https://github.com/umkyzn' },
   { label: 'bruhsailer', href: 'https://umkyzn.github.io/BRUHsailer/' },
 ];
 
-/**
- * Icon row. Each entry becomes one column, and the row stays centred however
- * many there are. `path` is the `d` of a single path on a 24x24 grid, drawn as
- * a stroke so it inherits the link colour.
- */
 const icons = [
   {
     label: 'email',
@@ -42,8 +36,6 @@ const description = 'kyznk.dev';
     <meta property="og:url" content={canonical} />
   </head>
   <body>
-    <!-- Decorative: four slow-drifting radial gradients, a vignette holding
-         contrast under the text, and grain to stop the gradients banding. -->
     <div class="mesh" aria-hidden="true">
       <span class="blob blob-1"></span>
       <span class="blob blob-2"></span>
